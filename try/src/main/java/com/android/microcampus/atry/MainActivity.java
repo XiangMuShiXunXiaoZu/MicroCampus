@@ -1,5 +1,4 @@
-package com.android.app.microcampus;
-
+package com.android.microcampus.atry;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,9 +13,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private BottomNavigationView navigation;
     private ViewPager viewPager;
 
-    private home fragment1 = new home();
-    private news fragment2 = new news();
-    private Person fragment3 = new Person();
+    private Fragment1 fragment1 = new Fragment1();
+    private Fragment2 fragment2 = new Fragment2();
+    private Fragment3 fragment3 = new Fragment3();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

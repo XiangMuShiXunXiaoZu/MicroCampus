@@ -101,8 +101,12 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess() {              //登录后进入MainActivity
         _loginButton.setEnabled(true);
+
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+
         finish();
     }
 
@@ -119,19 +123,19 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         //TODO 需要了解android.util.Patterns.EMAIL_ADDRESS的工作方式
-        if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            _usernameText.setError("输入有效的用户名哦");
-            valid = false;
-        } else {
-            _usernameText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("长度应该在4～10个字符之间呢");
-            valid = false;
-        } else {
-            _passwordText.setError(null);
-        }
+//        if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+//            _usernameText.setError("输入有效的用户名哦");
+//            valid = false;
+//        } else {
+//            _usernameText.setError(null);
+//        }
+//
+//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+//            _passwordText.setError("长度应该在4～10个字符之间呢");
+//            valid = false;
+//        } else {
+//            _passwordText.setError(null);
+//        }
 
         return valid;
     }
