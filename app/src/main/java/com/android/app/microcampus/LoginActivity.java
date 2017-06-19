@@ -11,12 +11,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.*;
+import com.android.volley.toolbox.*;
+import java.util.HashMap;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    private final String url="http://123.206.125.253/login"; //所需url
+    private static RequestQueue requestQueue;
 
     @Bind(R.id.input_username) EditText _usernameText;
     @Bind(R.id.input_password) EditText _passwordText;
@@ -28,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        requestQueue= Volley.newRequestQueue(this);
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -63,36 +71,34 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("登录中...");
         progressDialog.show();
 
         String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        HashMap<Object, Object>usermap=new HashMap<Object, Object>();
+        usermap.put("username", username);
+        usermap.put("password", password);
+        JSONObject map=new JSONObject(usermap);
         // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+        JsonObjectRequest req=new JsonObjectRequest(Request.Method.POST,url,map,new Response.Listener<JSONObject>(){
+            @Override
+            public void onResponse(JSONObject response){
+                progressDialog.dismiss();
+                onLoginSuccess();
+                //添加自己的响应逻辑
             }
-        }
+        }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error){
+                progressDialog.dismiss();
+                Log.e("LOGIN-ERROR", error.getMessage(), error);
+                onLoginFailed();
+            }
+        });
+        requestQueue.add(req);
+
     }
 
     @Override
@@ -101,18 +107,15 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {              //登录后进入MainActivity
+    public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
-
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(getBaseContext(), "登录失败", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
     }
 
@@ -122,21 +125,19 @@ public class LoginActivity extends AppCompatActivity {
         String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        //TODO 需要了解android.util.Patterns.EMAIL_ADDRESS的工作方式
-//        if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-//            _usernameText.setError("输入有效的用户名哦");
-//            valid = false;
-//        } else {
-//            _usernameText.setError(null);
-//        }
-//
-//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-//            _passwordText.setError("长度应该在4～10个字符之间呢");
-//            valid = false;
-//        } else {
-//            _passwordText.setError(null);
-//        }
+        if (username.isEmpty() || username.length() < 6 || username.length() > 20) {
+            _usernameText.setError("输入有效的用户名");
+            valid = false;
+        } else {
+            _usernameText.setError(null);
+        }
 
+        if (password.isEmpty() || password.length() < 6 || password.length() > 20) {
+            _passwordText.setError("长度应该在6～20个字符之间");
+            valid = false;
+        } else {
+            _passwordText.setError(null);
+        }
         return valid;
     }
 }
