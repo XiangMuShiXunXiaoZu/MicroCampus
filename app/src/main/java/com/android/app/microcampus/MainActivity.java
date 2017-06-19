@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToFragmentNews(){
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.content,new msgnotification()).commit();
+        fm.beginTransaction().replace(R.id.content,new MsgNotification()).commit();
     }
 
     public void switchToFragmentPerson(){

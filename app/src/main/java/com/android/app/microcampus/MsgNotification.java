@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class msgnotification extends Fragment {
+public class MsgNotification extends Fragment {
 
 
-    public msgnotification() {
+    public MsgNotification() {
         // Required empty public constructor
     }
 
@@ -23,7 +23,7 @@ public class msgnotification extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_msgnotification, container, false);
+        return inflater.inflate(R.layout.fragment_msg_notification, container, false);
     }
 
 }
