@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(true);
+    }
+
     public void switchToFragmentHome(){
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.content,new HomePage()).commit();
