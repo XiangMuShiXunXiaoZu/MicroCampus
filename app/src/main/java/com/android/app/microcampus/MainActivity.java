@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     switchToFragmentHome();
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_message:
                     switchToFragmentNews();
                     return true;
-                case R.id.navigation_notifications:
+                case R.id.navigation_person:
                     switchToFragmentPerson();
                     return true;
             }

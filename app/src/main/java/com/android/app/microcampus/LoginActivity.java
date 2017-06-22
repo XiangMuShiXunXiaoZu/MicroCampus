@@ -62,10 +62,22 @@ public class LoginActivity extends AppCompatActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case RESULT_OK:
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            default:
+                Log.v("INFO","default result.");
+                break;
+        }
     }
 
     @Override
@@ -95,11 +107,11 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("登录中...");
         progressDialog.show();
 
-        HashMap<Object, Object>usermap=new HashMap<Object, Object>();
-        usermap.put("username", username);
-        usermap.put("password", password);
-        JSONObject map=new JSONObject(usermap);
-        // TODO: Implement your own authentication logic here.
+        HashMap<Object, Object>userMap=new HashMap<Object, Object>();
+        userMap.put("username", username);
+        userMap.put("password", password);
+        JSONObject map=new JSONObject(userMap);
+
         JsonObjectRequest req=new JsonObjectRequest(Request.Method.POST,url,map,new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response){
@@ -111,11 +123,16 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor edt = user_info.edit();
                         edt.putString("username", username);
                         edt.putString("password", password);
+                        edt.putInt("uid", userId);
                         edt.commit();
                         onLoginSuccess();
-                    }else onLoginFailed();
+                    }else {
+                        onLoginFailed();
+                        Toast.makeText(getBaseContext(), "用户名或密码有误", Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
-                    Log.e("LOGIN-ERROR", e.getMessage());
+                    Log.e("LOGIN-ERROR", e.getMessage(), e);
+                    Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_LONG).show();
                     onLoginFailed();
                 }
             }
@@ -123,7 +140,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
-                Log.e("LOGIN-ERROR", error.getMessage());
+                Log.e("LOGIN-ERROR", error.getMessage(), error);
+                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_LONG).show();
                 onLoginFailed();
             }
         });
@@ -145,7 +163,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "登录失败", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
     }
 
