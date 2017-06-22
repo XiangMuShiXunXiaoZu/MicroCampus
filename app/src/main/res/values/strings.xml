@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">微校园</string>
     <string name="title_home">主页</string>
-    <string name="title_dashboard">消息</string>
-    <string name="title_notifications">个人</string>
+    <string name="title_message">消息</string>
+    <string name="title_person">个人</string>
     <string name="title_activity_login">用户登录</string>
 
     <!-- TODO: Remove or change this placeholder text -->
