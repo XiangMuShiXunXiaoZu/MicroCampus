@@ -37,7 +37,10 @@
         </activity>
         <activity android:name=".SignupActivity">
         </activity>
-        <activity android:name=".ItemActivity">
+        <activity
+            android:label="@string/add_item"
+            android:name=".ItemActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 

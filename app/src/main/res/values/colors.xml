@@ -13,4 +13,6 @@
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
+    <color name="graywhite">#EDEDED</color>
+
 </resources>

@@ -4,6 +4,7 @@
     <string name="title_dashboard">消息</string>
     <string name="title_notifications">个人</string>
     <string name="title_activity_login">用户登录</string>
+    <string name="add_item">物品登记</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_homepage_fragment">TODO finish home</string>
