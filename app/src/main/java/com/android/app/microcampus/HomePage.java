@@ -34,7 +34,6 @@ public class HomePage extends Fragment {
         setHasOptionsMenu(true);
 
 
-        getActivity().getActionBar().setTitle("首页");
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
