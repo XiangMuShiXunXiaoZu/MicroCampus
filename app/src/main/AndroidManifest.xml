@@ -18,29 +18,25 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN"/> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:label="@string/title_login">
         </activity>
         <activity
-            android:label="@string/add_item"
+            android:name=".SignupActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:label="@string/title_signup">
+        </activity>
+        <activity
+            android:label="@string/title_add_item"
             android:name=".ItemActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
         </activity>
     </application>
 

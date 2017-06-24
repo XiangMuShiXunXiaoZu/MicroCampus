@@ -80,17 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        user_info = getSharedPreferences("user_info", MODE_PRIVATE);
-        username = user_info.getString("username", "");
-        password = user_info.getString("password", "");
-        _usernameText.setText(username);
-        _passwordText.setText(password);
-        if (!username.isEmpty() && !password.isEmpty()) login();
-    }
-
     public void login() {
         Log.d(TAG, "Login");
 

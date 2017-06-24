@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static com.android.app.microcampus.R.id.action_add_photo;
+import static com.android.app.microcampus.R.id.action_release;
 
 public class ItemActivity extends AppCompatActivity {
 
@@ -62,7 +62,7 @@ public class ItemActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case action_add_photo:
+            case action_release:
                 addPhoto();
             default:
                 return super.onOptionsItemSelected(item);
