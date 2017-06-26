@@ -3,6 +3,7 @@ package com.android.app.microcampus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,6 +27,11 @@ public class HomePage extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +58,6 @@ public class HomePage extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu,menu);
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override

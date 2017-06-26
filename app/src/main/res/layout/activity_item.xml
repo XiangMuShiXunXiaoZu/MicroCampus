@@ -35,7 +35,7 @@
             <EditText
                 android:id="@+id/itemDescription"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
                 android:background="@null"
                 android:gravity="top"
                 android:layout_marginTop="0dp"
@@ -47,6 +47,11 @@
                 android:hint="添加描述"
                 android:inputType="textMultiLine"
                 android:textSize="16sp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/photo_to_add"
+                android:layout_gravity="top"/>
 
         </LinearLayout>
 
@@ -63,6 +68,7 @@
         android:padding="8dp">
 
         <ImageButton
+            android:id="@+id/add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_photo_library_grey_24dp"

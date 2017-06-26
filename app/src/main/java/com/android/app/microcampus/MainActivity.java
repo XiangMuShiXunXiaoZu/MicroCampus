@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switchToFragmentHome();
+        getSupportActionBar().setTitle("微校园");
     }
 
     @Override
@@ -43,12 +44,15 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     switchToFragmentHome();
+                    getSupportActionBar().setTitle("微校园");
                     return true;
                 case R.id.navigation_message:
                     switchToFragmentNews();
+                    getSupportActionBar().setTitle("消息与通知");
                     return true;
                 case R.id.navigation_person:
                     switchToFragmentPerson();
+                    getSupportActionBar().setTitle("个人信息");
                     return true;
             }
             return false;
