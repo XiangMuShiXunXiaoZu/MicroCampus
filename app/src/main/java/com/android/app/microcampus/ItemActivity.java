@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,18 +17,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 import static com.android.app.microcampus.R.id.action_release;
 
@@ -35,6 +41,8 @@ public class ItemActivity extends AppCompatActivity {
 
     private String mitemName;
     private String mdescription;
+    private EditText itemName;
+    private EditText itemDescription;
     private ImageView imageView;
     private Bitmap bitmap;
 
@@ -51,13 +59,10 @@ public class ItemActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        EditText itemName = (EditText)findViewById(R.id.itemName);
-        EditText itemDescription = (EditText)findViewById(R.id.itemName);
+        itemName = (EditText)findViewById(R.id.itemName);
+        itemDescription = (EditText)findViewById(R.id.itemDescription);
         ImageButton imageButton = (ImageButton)findViewById(R.id.add_photo);
         //imageView = (ImageView)findViewById(R.id.photo_to_add);
-
-        mitemName = itemName.getText().toString();
-        mdescription = itemDescription.getText().toString();
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +87,7 @@ public class ItemActivity extends AppCompatActivity {
                 return true;
             case android.R.id.home:
                 finish();
-                
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -93,6 +98,15 @@ public class ItemActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"select picture"),PICK_IMAGE_REQUEST);
+    }
+
+    //将图片从Bitmap转换为String类型
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes,Base64.DEFAULT);
+        return encodedImage;
     }
 
     @Override
@@ -112,7 +126,8 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     private void addItem() {
-
+        mitemName = itemName.getText().toString().trim();
+        mdescription = itemDescription.getText().toString().trim();
         final ProgressDialog progressDialog = new ProgressDialog(ItemActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("上传中...");
@@ -132,6 +147,7 @@ public class ItemActivity extends AppCompatActivity {
                 try{
                     int itemId = response.getInt("itemId");
                     if (itemId >= 0){
+
                         onAddItemSuccess();
                     }else {
                         onAddItemFailed();
@@ -154,7 +170,30 @@ public class ItemActivity extends AppCompatActivity {
                 onAddItemFailed();
             }
         });
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                String image = getStringImage(bitmap);
+                Map<String,String> map1 = new Hashtable<String,String>();
+                map1.put("image",image);
+                return super.getParams();
+            }
+        };
+
+
         requestQueue.add(req);
+        requestQueue.add(stringRequest);
     }
 
     private void onAddItemFailed() {
