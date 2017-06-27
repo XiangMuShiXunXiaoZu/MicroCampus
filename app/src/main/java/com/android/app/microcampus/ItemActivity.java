@@ -33,8 +33,6 @@ import static com.android.app.microcampus.R.id.action_release;
 
 public class ItemActivity extends AppCompatActivity {
 
-
-
     private String mitemName;
     private String mdescription;
     private ImageView imageView;
@@ -51,11 +49,12 @@ public class ItemActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         EditText itemName = (EditText)findViewById(R.id.itemName);
         EditText itemDescription = (EditText)findViewById(R.id.itemName);
         ImageButton imageButton = (ImageButton)findViewById(R.id.add_photo);
-        imageView = (ImageView)findViewById(R.id.photo_to_add);
+        //imageView = (ImageView)findViewById(R.id.photo_to_add);
 
         mitemName = itemName.getText().toString();
         mdescription = itemDescription.getText().toString();
@@ -69,10 +68,9 @@ public class ItemActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.itemmenu,menu);
+        getMenuInflater().inflate(R.menu.item_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -81,6 +79,10 @@ public class ItemActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case action_release:
                 addItem();
+                return true;
+            case android.R.id.home:
+                finish();
+                
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -111,8 +113,7 @@ public class ItemActivity extends AppCompatActivity {
 
     private void addItem() {
 
-        final ProgressDialog progressDialog = new ProgressDialog(ItemActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(ItemActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("上传中...");
         progressDialog.show();
@@ -131,7 +132,6 @@ public class ItemActivity extends AppCompatActivity {
                 try{
                     int itemId = response.getInt("itemId");
                     if (itemId >= 0){
-
                         onAddItemSuccess();
                     }else {
                         onAddItemFailed();

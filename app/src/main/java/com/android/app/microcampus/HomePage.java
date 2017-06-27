@@ -21,8 +21,6 @@ import static com.android.app.microcampus.R.id.action_search;
  */
 public class HomePage extends Fragment {
 
-    private FloatingActionButton fab;
-
     public HomePage() {
         // Required empty public constructor
     }
@@ -64,6 +62,8 @@ public class HomePage extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case action_search:
+                Intent intent = new Intent(getContext(),SearchActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -47,6 +47,7 @@ public class SignupActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         requestQueue = Volley.newRequestQueue(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,8 +67,7 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("注册中...");
         progressDialog.show();
