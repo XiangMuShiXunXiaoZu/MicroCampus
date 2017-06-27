@@ -43,7 +43,6 @@ public class ItemActivity extends AppCompatActivity {
     private String mdescription;
     private EditText itemName;
     private EditText itemDescription;
-    private ImageView imageView;
     private Bitmap bitmap;
 
     private static RequestQueue requestQueue;
@@ -62,7 +61,6 @@ public class ItemActivity extends AppCompatActivity {
         itemName = (EditText)findViewById(R.id.itemName);
         itemDescription = (EditText)findViewById(R.id.itemDescription);
         ImageButton imageButton = (ImageButton)findViewById(R.id.add_photo);
-        //imageView = (ImageView)findViewById(R.id.photo_to_add);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +115,6 @@ public class ItemActivity extends AppCompatActivity {
             Uri filepath = data.getData();
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filepath);
-                imageView.setImageBitmap(bitmap);
 
             }catch (IOException e){
                 e.printStackTrace();
