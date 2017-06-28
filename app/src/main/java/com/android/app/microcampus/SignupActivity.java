@@ -93,11 +93,11 @@ public class SignupActivity extends AppCompatActivity {
                         onSignupSuccess();
                     }else {
                         onSignupFailed();
-                        Toast.makeText(getBaseContext(), "用户名已被占用", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "用户名已被占用", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Log.e("LOGIN-ERROR", e.getMessage(), e);
-                    Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_SHORT).show();
                     onSignupFailed();
                 }
             }
@@ -106,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
                 Log.e("LOGIN-ERROR", error.getMessage(), error);
-                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
                 onSignupFailed();
             }
         });
