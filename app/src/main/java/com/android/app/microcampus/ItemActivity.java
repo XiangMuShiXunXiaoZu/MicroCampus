@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,7 +31,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static com.android.app.microcampus.R.id.action_release;
@@ -182,9 +180,10 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 String image = getStringImage(bitmap);
-                Map<String,String> map1 = new Hashtable<String,String>();
+                Map<String,String> map1 = new HashMap<String,String>();
+
                 map1.put("image",image);
-                return super.getParams();
+                return map1;
             }
         };
 
