@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+    <ImageView android:id="@+id/imageView"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="22dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imageView"
+        android:text="手机"
+        android:textColor="@color/oil"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18sp" />
+
+    <TextView android:id="@+id/descTextView"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_below="@id/titleTextView"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imageView"
+        android:text="过年亲友送的iPhone8 Plus，全新，自己用不上。希望低价出手给识货的同学，200不包邮。所有发票齐全，可小刀可面交。"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="14sp"
+        />
+</RelativeLayout>
