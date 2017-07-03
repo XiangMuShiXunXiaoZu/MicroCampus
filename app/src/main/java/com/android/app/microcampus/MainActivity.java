@@ -4,12 +4,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences user_info;
+    Fragment homepage;
+    Fragment msgNotification;
+    Fragment person;
+    Fragment currentFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +24,13 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        switchToFragmentHome();
+        homepage = new HomePage();
+        msgNotification = new MsgNotification();
+        person = new Person();
+        currentFragment = homepage;
+
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().add(R.id.content,homepage).commit();
         getSupportActionBar().setTitle("微校园");
     }
 
@@ -44,14 +56,17 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     switchToFragmentHome();
+                    currentFragment = homepage;
                     getSupportActionBar().setTitle("微校园");
                     return true;
                 case R.id.navigation_message:
                     switchToFragmentNews();
+                    currentFragment = msgNotification;
                     getSupportActionBar().setTitle("消息与通知");
                     return true;
                 case R.id.navigation_person:
                     switchToFragmentPerson();
+                    currentFragment = person;
                     getSupportActionBar().setTitle("个人信息");
                     return true;
             }
@@ -66,20 +81,28 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void switchToFragmentHome(){
+
+    public void switchContent(Fragment from, Fragment to) {
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.content,new HomePage()).commit();
+
+        if (!to.isAdded()) {    // 先判断是否被add过
+            fm.beginTransaction().hide(from).add(R.id.content, to).commit();
+        } else {
+            fm.beginTransaction().hide(from).show(to).commit();
+        }
+    }
+    public void switchToFragmentHome(){
+        switchContent(currentFragment,homepage);
     }
 
     public void switchToFragmentNews(){
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.content,new MsgNotification()).commit();
+        switchContent(currentFragment,msgNotification);
     }
 
     public void switchToFragmentPerson(){
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.content,new Person()).commit();
+        switchContent(currentFragment,person);
     }
+
 
 
 }

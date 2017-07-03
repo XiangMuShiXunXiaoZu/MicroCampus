@@ -8,7 +8,6 @@
     <string name="title_signup">注册</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_homepage_fragment">TODO finish home</string>
     <string name="hello_msgnotification_fragment">TODO finish news</string>
     <string name="hello_person_fragment">TODO finish person</string>
 

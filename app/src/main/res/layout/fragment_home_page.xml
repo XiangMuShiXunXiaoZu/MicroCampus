@@ -5,12 +5,16 @@
              android:layout_height="match_parent"
              tools:context="com.android.app.microcampus.HomePage">
 
+
+
+
+
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_homepage_fragment"/>
-
+        android:clickable="true"/>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -24,5 +28,15 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/location"
+        android:background="@drawable/ic_refresh"
+        android:layout_alignParentRight="true"
+
+        android:layout_above="@id/floatingActionButton"
+        />
 
 </RelativeLayout>
