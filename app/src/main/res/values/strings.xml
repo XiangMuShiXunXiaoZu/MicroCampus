@@ -6,6 +6,7 @@
     <string name="title_add_item">物品发布</string>
     <string name="title_login">登录</string>
     <string name="title_signup">注册</string>
+    <string name="title_view_item">查看物品</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_msgnotification_fragment">TODO finish news</string>

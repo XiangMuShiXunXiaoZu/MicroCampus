@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
+        android:name=".Data"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
@@ -37,8 +38,8 @@
         </service>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -46,28 +47,31 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTop"
             android:label="@string/title_login"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SignupActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_signup"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName="com.android.app.microcampus.LoginActivity"></activity>
+            android:launchMode="singleTask"
+            android:parentActivityName=".LoginActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ItemActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_add_item"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName="com.android.app.microcampus.MainActivity">
-       </activity>
-        <activity android:name=".SearchActivity"
-            android:theme="@style/TollBarTheme"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName="com.android.app.microcampus.MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".SearchActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/TollBarTheme"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".ViewItemActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".SearchActivity"
+            android:label="@string/title_view_item"></activity>
     </application>
 
 </manifest>
