@@ -2,7 +2,6 @@ package com.android.app.microcampus;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,13 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -50,9 +47,8 @@ public class ItemActivity extends AppCompatActivity {
     private static RequestQueue requestQueue;
     private static int PICK_IMAGE_REQUEST = 1;
     private static final String url="http://123.206.125.253/additem"; //所需url
-    private SharedPreferences user_info;
     private int userId;
-    private static boolean hasImage = false;
+    private boolean hasImage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +56,8 @@ public class ItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item);
 
         requestQueue = Volley.newRequestQueue(this);
-        user_info = getSharedPreferences("user_info", MODE_PRIVATE);
-        userId = user_info.getInt("uid", -1);
+        Data app = (Data)getApplication();
+        userId = app.getUserId();
 
         vectorDrawableColored = VectorDrawableCompat.create(getResources(),R.drawable.ic_photo_library_grey_24dp,getTheme());
         vectorDrawableColored.setTint(getResources().getColor(R.color.colorAccent));
@@ -186,7 +182,7 @@ public class ItemActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(), "物品添加失败", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    Log.e("LOGIN-ERROR", e.getMessage(), e);
+                    Log.e("ERROR", e.getMessage(), e);
                     Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_SHORT).show();
                     onAddItemFailed();
                 }
@@ -196,7 +192,7 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
-                Log.e("LOGIN-ERROR", error.getMessage(), error);
+                Log.e("ERROR", error.getMessage(), error);
                 Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
                 onAddItemFailed();
             }
@@ -209,6 +205,7 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     private void onAddItemSuccess() {
+        Toast.makeText(getBaseContext(), "添加成功！", Toast.LENGTH_SHORT).show();
         finish();
     }
 

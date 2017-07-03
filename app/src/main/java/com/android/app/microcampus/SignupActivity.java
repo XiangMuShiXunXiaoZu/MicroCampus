@@ -86,8 +86,6 @@ public class SignupActivity extends AppCompatActivity {
                     if (userId >= 0){
                         user_info = getSharedPreferences("user_info", MODE_PRIVATE);
                         SharedPreferences.Editor edt = user_info.edit();
-                        edt.putString("username", username);
-                        edt.putString("password", password);
                         edt.putInt("uid", userId);
                         edt.commit();
                         onSignupSuccess();
@@ -96,7 +94,7 @@ public class SignupActivity extends AppCompatActivity {
                         Toast.makeText(getBaseContext(), "用户名已被占用", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    Log.e("LOGIN-ERROR", e.getMessage(), e);
+                    Log.e("ERROR", e.getMessage(), e);
                     Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_SHORT).show();
                     onSignupFailed();
                 }
@@ -105,7 +103,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
-                Log.e("LOGIN-ERROR", error.getMessage(), error);
+                Log.e("ERROR", error.getMessage(), error);
                 Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
                 onSignupFailed();
             }

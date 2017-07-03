@@ -9,31 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences user_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Data app = (Data)getApplication();
+        SharedPreferences user_info = getSharedPreferences("user_info", MODE_PRIVATE);
+        if (user_info.getInt("uid", -1) < 0){
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            app.setUserId(user_info.getInt("uid", -1));
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         switchToFragmentHome();
         getSupportActionBar().setTitle("微校园");
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        user_info = getSharedPreferences("user_info", MODE_PRIVATE);
-        String username = user_info.getString("username", "");
-        String password = user_info.getString("password", "");
-        int userId = user_info.getInt("uid", -1);
-        if (username.isEmpty() || password.isEmpty() || userId < 0) {
-            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

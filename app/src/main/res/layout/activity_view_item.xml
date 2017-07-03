@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    tools:context="com.android.app.microcampus.ViewItemActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/itemImageView"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@color/graywhite"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/itemImageView"
+            android:layout_alignParentEnd="true"
+            android:padding="16dp"
+            android:weightSum="1"
+            android:orientation="vertical"
+            android:background="#fff"
+            android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/itemTitleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="56dp"
+                android:textColor="@color/oil"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/itemLocationIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/itemTitleView"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/ic_place_grey_24dp" />
+
+            <TextView
+                android:id="@+id/itemLocationView"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:text="0.0km 未知地点"
+                android:textSize="14sp"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/itemLocationIcon"
+                android:layout_marginLeft="2dp"
+                android:layout_below="@+id/itemTitleView"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/itemDescView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textColor="@color/oil"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/itemLocationIcon"
+                android:layout_marginTop="16dp"/>
+
+        </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/chatActionButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="292dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_chat_white_24dp" />
+
+    </RelativeLayout>
+</ScrollView>
