@@ -2,10 +2,12 @@ package com.android.app.microcampus;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -42,10 +44,15 @@ public class ItemActivity extends AppCompatActivity {
     private EditText itemName;
     private EditText itemDescription;
     private Bitmap bitmap;
+    private ImageButton imgButtom;
+    VectorDrawableCompat vectorDrawableColored, vectorDrawable;
 
     private static RequestQueue requestQueue;
     private static int PICK_IMAGE_REQUEST = 1;
     private static final String url="http://123.206.125.253/additem"; //所需url
+    private SharedPreferences user_info;
+    private int userId;
+    private static boolean hasImage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +60,17 @@ public class ItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item);
 
         requestQueue = Volley.newRequestQueue(this);
+        user_info = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = user_info.getInt("uid", -1);
+
+        vectorDrawableColored = VectorDrawableCompat.create(getResources(),R.drawable.ic_photo_library_grey_24dp,getTheme());
+        vectorDrawableColored.setTint(getResources().getColor(R.color.colorAccent));
+        vectorDrawable = VectorDrawableCompat.create(getResources(),R.drawable.ic_photo_library_grey_24dp,getTheme());
+        vectorDrawable.setTint(getResources().getColor(R.color.jumbo));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        imgButtom = (ImageButton)findViewById(R.id.add_photo);
         itemName = (EditText)findViewById(R.id.itemName);
         itemDescription = (EditText)findViewById(R.id.itemDescription);
         ImageButton imageButton = (ImageButton)findViewById(R.id.add_photo);
@@ -83,7 +98,6 @@ public class ItemActivity extends AppCompatActivity {
                 return true;
             case android.R.id.home:
                 finish();
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -110,6 +124,8 @@ public class ItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+            hasImage = true;
+            imgButtom.setImageDrawable(vectorDrawableColored);
             Uri filepath = data.getData();
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),filepath);
@@ -117,20 +133,42 @@ public class ItemActivity extends AppCompatActivity {
             }catch (IOException e){
                 e.printStackTrace();
             }
+        }else{
+            hasImage = false;
+            imgButtom.setImageDrawable(vectorDrawable);
         }
     }
 
     private void addItem() {
         mitemName = itemName.getText().toString().trim();
         mdescription = itemDescription.getText().toString().trim();
+
+        if (mitemName.isEmpty()) {
+            itemName.setError("请输入物品名称");
+            return;
+        } else {
+            itemName.setError(null);
+        }
+
+        if (mdescription.isEmpty()) {
+            Toast.makeText(getBaseContext(), "请添加描述", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!hasImage) {
+            Toast.makeText(getBaseContext(), "请添加图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final ProgressDialog progressDialog = new ProgressDialog(ItemActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("上传中...");
         progressDialog.show();
 
         HashMap<Object, Object> itemMap=new HashMap<Object, Object>();
+        itemMap.put("userId",userId);
         itemMap.put("itemName", mitemName);
         itemMap.put("description", mdescription);
+        String image = getStringImage(bitmap);
+        itemMap.put("image", image);
         JSONObject map=new JSONObject(itemMap);
 
         //TODO finish the logic
@@ -142,7 +180,6 @@ public class ItemActivity extends AppCompatActivity {
                 try{
                     int itemId = response.getInt("itemId");
                     if (itemId >= 0){
-
                         onAddItemSuccess();
                     }else {
                         onAddItemFailed();
@@ -154,42 +191,18 @@ public class ItemActivity extends AppCompatActivity {
                     onAddItemFailed();
                 }
 
-
             }
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
                 Log.e("LOGIN-ERROR", error.getMessage(), error);
-                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
                 onAddItemFailed();
             }
         });
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>(){
-            @Override
-            public void onResponse(String response) {
-
-            }
-        },new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                String image = getStringImage(bitmap);
-                Map<String,String> map1 = new HashMap<String,String>();
-
-                map1.put("image",image);
-                return map1;
-            }
-        };
-
-
         requestQueue.add(req);
-        requestQueue.add(stringRequest);
     }
 
     private void onAddItemFailed() {

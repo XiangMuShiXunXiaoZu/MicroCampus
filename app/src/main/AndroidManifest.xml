@@ -26,12 +26,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
 
         <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="kNYbNMoN5dqow8bAn5ytCuH6lvt24xG4"></meta-data>
 
