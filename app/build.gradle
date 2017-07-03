@@ -11,6 +11,14 @@ android {
             storePassword 'weixiaoyuan'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+
+
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
