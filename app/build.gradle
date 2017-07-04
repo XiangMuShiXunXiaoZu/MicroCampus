@@ -7,7 +7,7 @@ android {
         Release {
             keyAlias 'microcampus'
             keyPassword 'weixiaoyuan'
-            storeFile file('/Users/lulujie/microcampus.jks')
+            storeFile file('C:/Users/john/.android/microcampus.jks')
             storePassword 'weixiaoyuan'
         }
     }
@@ -16,9 +16,6 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-
-
-
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
@@ -28,6 +25,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.Release
     }
     buildTypes {
         release {
@@ -35,6 +33,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+        }
+    }
+    productFlavors {
     }
 }
 

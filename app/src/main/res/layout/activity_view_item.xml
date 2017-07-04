@@ -51,14 +51,14 @@
                 android:layout_height="16dp"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/itemTitleView"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 app:srcCompat="@drawable/ic_place_grey_24dp" />
 
             <TextView
                 android:id="@+id/itemLocationView"
                 android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:text="0.0km 未知地点"
+                android:layout_height="wrap_content"
+                android:text="0.0km"
                 android:textSize="14sp"
                 android:layout_alignParentEnd="true"
                 android:layout_toEndOf="@+id/itemLocationIcon"

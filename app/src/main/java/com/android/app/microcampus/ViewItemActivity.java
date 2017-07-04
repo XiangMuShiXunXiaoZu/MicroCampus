@@ -23,6 +23,8 @@ public class ViewItemActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         TextView itemTitle = (TextView)findViewById(R.id.itemTitleView);
         TextView itemDesc = (TextView)findViewById(R.id.itemDescView);
+        TextView distance = (TextView)findViewById(R.id.itemLocationView);
+        distance.setText(bundle.getString("distance"));
         itemTitle.setText(bundle.getString("itemName"));
         itemDesc.setText(bundle.getString("itemSummary"));
         final ImageView itemImage = (ImageView)findViewById(R.id.itemImageView);

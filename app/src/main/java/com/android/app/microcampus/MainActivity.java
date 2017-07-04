@@ -38,7 +38,12 @@ public class MainActivity extends AppCompatActivity {
         currentFragment = homepage;
 
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().add(R.id.content,homepage).commit();
+        if (!homepage.isAdded()) {    // 先判断是否被add过
+            fm.beginTransaction().add(R.id.content, homepage).commit();
+        } else {
+            fm.beginTransaction().show(homepage).commit();
+        }
+
         getSupportActionBar().setTitle("微校园");
     }
 
@@ -75,10 +80,24 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        homepage.onResume();
+        msgNotification.onResume();
+        person.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        homepage.onPause();
+        msgNotification.onPause();
+        person.onPause();
+    }
 
     public void switchContent(Fragment from, Fragment to) {
         FragmentManager fm = getSupportFragmentManager();
-
         if (!to.isAdded()) {    // 先判断是否被add过
             fm.beginTransaction().hide(from).add(R.id.content, to).commit();
         } else {
@@ -86,15 +105,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void switchToFragmentHome(){
-        switchContent(currentFragment,homepage);
+        switchContent(currentFragment, homepage);
     }
 
     public void switchToFragmentNews(){
-        switchContent(currentFragment,msgNotification);
+        switchContent(currentFragment, msgNotification);
     }
 
     public void switchToFragmentPerson(){
-        switchContent(currentFragment,person);
+        switchContent(currentFragment, person);
     }
 
 

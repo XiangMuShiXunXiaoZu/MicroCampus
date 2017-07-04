@@ -16,39 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
-import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.model.LatLng;
-
-import java.util.List;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.MyLocationStyle;
 
 import static com.android.app.microcampus.R.id.action_search;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomePage extends Fragment{
-    //定位相关
-    public LocationClient mLocationClient;
     private MapView mapView;
-    private BaiduMap mBaiduMap;
-    private Button startLocation;
     private double latitude;
     private double longitude;
     private String address;
@@ -60,59 +36,54 @@ public class HomePage extends Fragment{
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (Data)getActivity().getApplication();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        SDKInitializer.initialize(getActivity().getApplicationContext());
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
-
-
-
-
-
         setHasOptionsMenu(true);
+        int checkPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
 
-        mapView = (MapView)view.findViewById(R.id.bmapView);
-        startLocation = (Button)view.findViewById(R.id.location);
+        //获取地图控件引用
+        mapView = (MapView)view.findViewById(R.id.amapView);
+        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
+        mapView.onCreate(savedInstanceState);
+        //初始化地图控制器对象
+        AMap aMap = mapView.getMap();
+        MyLocationStyle myLocationStyle;
+        myLocationStyle = new MyLocationStyle(); //初始化定位蓝点样式类
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW); //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
+        myLocationStyle.interval(10000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.showMyLocation(true); //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息
+        aMap.setMyLocationStyle(myLocationStyle); //设置定位蓝点的Style
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        aMap.getUiSettings().setZoomControlsEnabled(false);
+        aMap.setMyLocationEnabled(true); // 设置为true表示启动显示定位蓝点;
+        aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener(){
+            @Override
+            public void onMyLocationChange(android.location.Location location) {
+                //从location对象中获取经纬度信息，地址描述信息，建议拿到位置之后调用逆地理编码接口获取（获取地址描述数据章节有介绍）
+                app.setLatitude(location.getLatitude());
+                app.setLongitude(location.getLongitude());
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
-
-        mBaiduMap = mapView.getMap();
-
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-        BDLocationListener listener = new MyLocationListener();
-        mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(3));
-        mLocationClient = new LocationClient(getActivity().getApplicationContext());
-        mLocationClient.registerLocationListener(listener);
-        mapView.removeViewAt(1);
-        mapView.showZoomControls(false);
-        mapView.removeViewAt(2);
-        showLocation();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ItemActivity.class);
+                Intent intent = new Intent(getActivity(), ItemActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        Button startLocation = (Button)view.findViewById(R.id.location);
-        startLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            showLocation();
-
             }
         });
 
@@ -129,116 +100,13 @@ public class HomePage extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case action_search:
-                Intent intent = new Intent(getContext(), SearchActivity.class);
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-    class MyLocationListener implements BDLocationListener {
-
-        public void onReceiveLocation(BDLocation location) {
-            if (location == null) {
-                return;
-            }
-            StringBuffer sb = new StringBuffer(256);
-            sb.append("time : ");
-            sb.append(location.getTime());
-            sb.append("\nerror code : ");
-            sb.append(location.getLocType());
-            sb.append("\nlatitude : ");
-            sb.append(location.getLatitude());
-            sb.append("\nlontitude : ");
-            sb.append(location.getLongitude());
-            sb.append("\nradius : ");
-            sb.append(location.getRadius());
-            if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
-                sb.append("\nspeed : ");
-                sb.append(location.getSpeed());// 单位：公里每小时
-                sb.append("\nsatellite : ");
-                sb.append(location.getSatelliteNumber());
-                sb.append("\nheight : ");
-                sb.append(location.getAltitude());// 单位：米
-                sb.append("\ndirection : ");
-                sb.append(location.getDirection());// 单位度
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());
-                sb.append("\ndescribe : ");
-                sb.append("gps定位成功");
-
-            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());
-                //运营商信息
-                sb.append("\noperationers : ");
-                sb.append(location.getOperators());
-                sb.append("\ndescribe : ");
-                sb.append("网络定位成功");
-            } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
-                sb.append("\ndescribe : ");
-                sb.append("离线定位成功，离线定位结果也是有效的");
-            } else if (location.getLocType() == BDLocation.TypeServerError) {
-                sb.append("\ndescribe : ");
-                sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
-            } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-                sb.append("\ndescribe : ");
-                sb.append("网络不同导致定位失败，请检查网络是否通畅");
-            } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-                sb.append("\ndescribe : ");
-                sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-            }
-            sb.append("\nlocationdescribe : ");
-            sb.append(location.getLocationDescribe());// 位置语义化信息
-            List<Poi> list = location.getPoiList();// POI数据
-
-
-
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            app.setLatitude(latitude);
-            app.setLongitude(longitude);
-
-
-
-
-            if (list != null) {
-                sb.append("\npoilist size = : ");
-                sb.append(list.size());
-                for (Poi p : list) {
-                    sb.append("\npoi= : ");
-                    sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
-                }
-            }
-            Log.d("BaiduLocationApiDem", sb.toString());
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_location_red);
-            //创建一个图层选项
-            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            OverlayOptions options = new MarkerOptions().position(latlng).icon(bitmapDescriptor);
-            mBaiduMap.addOverlay(options);
-            MapStatus mMapStatus = new MapStatus.Builder()
-                    .target(latlng)
-                    .zoom(12)
-                    .build();
-//定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-
-            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-//改变地图状态
-            mBaiduMap.setMapStatus(mMapStatusUpdate);
-
-
-        }
-
-        @Override
-        public void onConnectHotSpotMessage(String s, int i) {
-
-        }
-
-    }
-
 
     @Override
     public void onResume() {
@@ -249,46 +117,20 @@ public class HomePage extends Fragment{
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+        if (mapView != null) mapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mapView != null ) mapView.onDestroy();
+        if (mapView != null) mapView.onDestroy();
     }
 
-    public void showLocation(){
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
-        );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-//                int span = 5000; //5秒发送一次
-        option.setScanSpan(0);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//可选，默认false,设置是否使用gps
-        option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
-        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(true);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
-        option.setNeedDeviceDirect(true); //返回的定位结果包含手机机头方向
-
-        mLocationClient.setLocOption(option);
-        int checkPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            Log.d("tttt", "弹出提示");
-            return;
-        } else {
-            mLocationClient.start();
-        }
-        mLocationClient.start(); //启动位置请求
-        mLocationClient.requestLocation();//发送请求
-
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
+        mapView.onSaveInstanceState(outState);
     }
-
 }
 
 
