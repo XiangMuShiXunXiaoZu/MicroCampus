@@ -9,8 +9,7 @@
     <ImageView android:id="@+id/imageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@color/graywhite"
-        />
+        android:background="@color/graywhite" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -48,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/descTextView"
         android:layout_toRightOf="@id/iconView"
-        android:layout_marginLeft="2dp"
         android:text="0.0km"
         android:ellipsize="end"
         android:maxLines="1"
