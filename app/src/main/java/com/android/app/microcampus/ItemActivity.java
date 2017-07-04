@@ -3,6 +3,7 @@ package com.android.app.microcampus;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -113,7 +114,7 @@ public class ItemActivity extends AppCompatActivity {
     //将图片从Bitmap转换为String类型
     public String getStringImage(Bitmap bmp){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG,100,baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 75, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes,Base64.DEFAULT);
         return encodedImage;
@@ -158,6 +159,7 @@ public class ItemActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "请添加图片", Toast.LENGTH_SHORT).show();
             return;
         }
+
         final ProgressDialog progressDialog = new ProgressDialog(ItemActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("上传中...");

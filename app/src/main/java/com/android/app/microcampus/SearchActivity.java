@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.amap.api.maps2d.AMapUtils;
+import com.amap.api.maps2d.model.LatLng;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,9 +32,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.R.id.list;
 import static com.android.app.microcampus.R.id.imageView;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
@@ -58,8 +63,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         myAdapter = new SimpleAdapter(this,
                 listems,
                 R.layout.list_item,
-                new String[]{"itemName", "itemSummary","image"},
-                new int[]{R.id.titleTextView, R.id.descTextView, R.id.imageView});
+                new String[]{"itemName", "itemSummary", "image", "distance"},
+                new int[]{R.id.titleTextView, R.id.descTextView, R.id.imageView, R.id.locationTextView});
         listView.setAdapter(myAdapter);
         myAdapter.setViewBinder(new SimpleAdapter.ViewBinder(){
             @Override
@@ -81,6 +86,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 bundle.putInt("userId", Integer.valueOf(listems.get(arg2).get("userId").toString()));
                 bundle.putString("itemName", (listems.get(arg2).get("itemName").toString()));
                 bundle.putString("itemSummary", (listems.get(arg2).get("itemSummary").toString()));
+                bundle.putString("distance", (listems.get(arg2).get("distance").toString()));
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
                 intent.setClass(SearchActivity.this, ViewItemActivity.class);
@@ -160,15 +166,47 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     private void showItem(JSONObject result) throws JSONException{
         int len = result.getInt("itemNumber");
+        if (len <= 0) {
+            Toast.makeText(getBaseContext(), "没有结果", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Data app = (Data)getApplication();
+        LatLng myLatlng = new LatLng(app.getLatitude(), app.getLongitude());
+        for(int i = 0; i < len; i++) {
+            Map<String, Object> listem = new HashMap<String, Object>();
+            listem.put("userId", result.getString("userId" + i));
+            listem.put("itemId", result.getString("itemId" + i));
+            listem.put("itemName", result.getString("itemName" + i));
+            listem.put("itemSummary", result.getString("itemSummary" + i));
+            double latitude = result.getDouble("latitude" + i);
+            listem.put("latitude", latitude);
+            double longitude = result.getDouble("longitude" + i);
+            listem.put("longitude", longitude);
+            LatLng latLng = new LatLng(latitude, longitude);
+            float distance = AMapUtils.calculateLineDistance(myLatlng, latLng) / 1000;
+            listem.put("distance", distance);
+            listem.put("image", null);
+            listems.add(listem);
+        }
+
+        Collections.sort(listems, new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                Map<String, Object> m1=(Map<String, Object>)o1;
+                Map<String, Object> m2=(Map<String, Object>)o2;
+                float f1=(float)m1.get("distance");
+                float f2=(float)m2.get("distance");
+                if (f1>f2) return 1;
+                else if (f1<f2) return -1;
+                else return 0;
+            }
+
+        });
+
         for(int i = 0; i < len; i++){
             final int index = i;
-            Map<String, Object> listem = new HashMap<String, Object>();
-            listem.put("userId", result.getString("userId"+i));
-            listem.put("itemId", result.getString("itemId"+i));
-            listem.put("itemName", result.getString("itemName"+i));
-            listem.put("itemSummary", result.getString("itemSummary"+i));
-            listem.put("image", null);
-            ImageRequest imageRequest = new ImageRequest(imageUrl+"?uid="+result.getInt("userId"+i)+"&iid="+result.getInt("itemId"+i),
+            listems.get(i).put("distance", String.format("%.1fkm", (float)listems.get(i).get("distance")));
+            ImageRequest imageRequest = new ImageRequest(imageUrl+"?uid="+ listems.get(i).get("userId")+"&iid="+listems.get(i).get("itemId"),
                     new Response.Listener<Bitmap>() {
                         @Override
                         public void onResponse(Bitmap response) {
@@ -184,7 +222,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 }
             });
             requestQueue.add(imageRequest);
-            listems.add(listem);
         }
     }
 }

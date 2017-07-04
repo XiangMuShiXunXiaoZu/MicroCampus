@@ -21,8 +21,6 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
 
-import java.util.List;
-
 import static com.android.app.microcampus.R.id.action_search;
 
 public class HomePage extends Fragment{
@@ -50,28 +48,32 @@ public class HomePage extends Fragment{
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         setHasOptionsMenu(true);
+        int checkPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
 
         //获取地图控件引用
         mapView = (MapView)view.findViewById(R.id.amapView);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mapView.onCreate(savedInstanceState);
-        if (mapView==null) Log.v("map","false");
-        else Log.v("map","true");
         //初始化地图控制器对象
         AMap aMap = mapView.getMap();
         MyLocationStyle myLocationStyle;
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE) ;//定位一次，且将视角移动到地图中心点
+        myLocationStyle = new MyLocationStyle(); //初始化定位蓝点样式类
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW); //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
+        myLocationStyle.interval(10000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.showMyLocation(true); //设置是否显示定位小蓝点，用于满足只想使用定位，不想使用定位小蓝点的场景，设置false以后图面上不再有定位蓝点的概念，但是会持续回调位置信息
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置
+        aMap.setMyLocationStyle(myLocationStyle); //设置定位蓝点的Style
+        aMap.getUiSettings().setMyLocationButtonEnabled(true);
         aMap.getUiSettings().setZoomControlsEnabled(false);
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点;
+        aMap.setMyLocationEnabled(true); // 设置为true表示启动显示定位蓝点;
         aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener(){
             @Override
             public void onMyLocationChange(android.location.Location location) {
                 //从location对象中获取经纬度信息，地址描述信息，建议拿到位置之后调用逆地理编码接口获取（获取地址描述数据章节有介绍）
-                Log.v("Location",location.toString());
+                app.setLatitude(location.getLatitude());
+                app.setLongitude(location.getLongitude());
             }
         });
 
@@ -80,7 +82,7 @@ public class HomePage extends Fragment{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ItemActivity.class);
+                Intent intent = new Intent(getActivity(), ItemActivity.class);
                 startActivity(intent);
             }
         });
@@ -98,7 +100,7 @@ public class HomePage extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case action_search:
-                Intent intent = new Intent(getContext(), SearchActivity.class);
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 return true;
             default:
