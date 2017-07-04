@@ -1,10 +1,14 @@
 package com.android.app.microcampus;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,16 +49,23 @@ public class HomePage extends Fragment{
     private MapView mapView;
     private BaiduMap mBaiduMap;
     private Button startLocation;
+    private double latitude;
+    private double longitude;
+    private String address;
+    private Data app;
+
+
 
     public HomePage() {
         // Required empty public constructor
     }
 
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        app = (Data)getActivity().getApplication();
 
     }
 
@@ -65,6 +76,11 @@ public class HomePage extends Fragment{
         SDKInitializer.initialize(getActivity().getApplicationContext());
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
+
+
+
+
+
         setHasOptionsMenu(true);
 
         mapView = (MapView)view.findViewById(R.id.bmapView);
@@ -72,6 +88,7 @@ public class HomePage extends Fragment{
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
 
         mBaiduMap = mapView.getMap();
+
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         BDLocationListener listener = new MyLocationListener();
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(3));
@@ -94,7 +111,7 @@ public class HomePage extends Fragment{
         startLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-        showLocation();
+            showLocation();
 
             }
         });
@@ -177,6 +194,17 @@ public class HomePage extends Fragment{
             sb.append("\nlocationdescribe : ");
             sb.append(location.getLocationDescribe());// 位置语义化信息
             List<Poi> list = location.getPoiList();// POI数据
+
+
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            app.setLatitude(latitude);
+            app.setLongitude(longitude);
+
+
+
+
             if (list != null) {
                 sb.append("\npoilist size = : ");
                 sb.append(list.size());
@@ -208,7 +236,9 @@ public class HomePage extends Fragment{
         public void onConnectHotSpotMessage(String s, int i) {
 
         }
+
     }
+
 
     @Override
     public void onResume() {
@@ -225,7 +255,7 @@ public class HomePage extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        if(mapView != null ) mapView.onDestroy();
     }
 
     public void showLocation(){
@@ -246,6 +276,14 @@ public class HomePage extends Fragment{
         option.setNeedDeviceDirect(true); //返回的定位结果包含手机机头方向
 
         mLocationClient.setLocOption(option);
+        int checkPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            Log.d("tttt", "弹出提示");
+            return;
+        } else {
+            mLocationClient.start();
+        }
         mLocationClient.start(); //启动位置请求
         mLocationClient.requestLocation();//发送请求
 
