@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.android.app.microcampus.R.id.action_release;
 
@@ -48,6 +47,8 @@ public class ItemActivity extends AppCompatActivity {
     private static int PICK_IMAGE_REQUEST = 1;
     private static final String url="http://123.206.125.253/additem"; //所需url
     private int userId;
+    private double latitude;
+    private double longitude;
     private boolean hasImage = false;
 
     @Override
@@ -58,6 +59,9 @@ public class ItemActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         Data app = (Data)getApplication();
         userId = app.getUserId();
+        latitude = app.getLatitude();
+        longitude = app.getLongitude();
+
 
         vectorDrawableColored = VectorDrawableCompat.create(getResources(),R.drawable.ic_photo_library_grey_24dp,getTheme());
         vectorDrawableColored.setTint(getResources().getColor(R.color.colorAccent));
@@ -163,6 +167,8 @@ public class ItemActivity extends AppCompatActivity {
         itemMap.put("userId",userId);
         itemMap.put("itemName", mitemName);
         itemMap.put("description", mdescription);
+        itemMap.put("latitude",latitude);
+        itemMap.put("longitude",longitude);
         String image = getStringImage(bitmap);
         itemMap.put("image", image);
         JSONObject map=new JSONObject(itemMap);

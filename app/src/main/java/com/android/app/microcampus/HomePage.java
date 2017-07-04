@@ -1,10 +1,14 @@
 package com.android.app.microcampus;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +27,12 @@ import static com.android.app.microcampus.R.id.action_search;
 
 public class HomePage extends Fragment{
     private MapView mapView;
+    private double latitude;
+    private double longitude;
+    private String address;
+    private Data app;
+
+
 
     public HomePage() {
         // Required empty public constructor
@@ -31,6 +41,7 @@ public class HomePage extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        app = (Data)getActivity().getApplication();
     }
 
     @Override
@@ -76,8 +87,6 @@ public class HomePage extends Fragment{
 
         return view;
     }
-
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

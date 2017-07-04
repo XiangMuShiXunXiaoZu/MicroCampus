@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
+
             @Override
             public void onClick(View v) {
                 login();
