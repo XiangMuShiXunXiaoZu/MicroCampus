@@ -193,7 +193,7 @@ public class ItemActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error){
                 progressDialog.dismiss();
                 Log.e("ERROR", error.getMessage(), error);
-                Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "连接服务器失败，图片大小可能超出限制", Toast.LENGTH_SHORT).show();
                 onAddItemFailed();
             }
         });
