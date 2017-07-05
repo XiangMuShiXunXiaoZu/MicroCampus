@@ -1,9 +1,13 @@
 package com.android.app.microcampus;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -26,8 +30,15 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        databaseAdapter dbAdapter = new databaseAdapter(getApplicationContext(), "message1", null, 3);
+        Log.d("DatabaseName", dbAdapter.getDatabaseName());
+        SQLiteDatabase db = dbAdapter.getWritableDatabase();
+        Bundle bundle = getIntent().getExtras();
+
+
         setContentView(R.layout.activity_chat);
-        getSupportActionBar().setTitle("用户一");
+        getSupportActionBar().setTitle("");
         final ListView mListView=(ListView)findViewById(R.id.MainList);
         mData=LoadData();
         mAdapter=new ChatAdapter(this, mData);
@@ -95,16 +106,39 @@ public class ChatActivity extends AppCompatActivity {
     {
         List<ChatMessage> Messages=new ArrayList<ChatMessage>();
 
-        ChatMessage Message=new ChatMessage(ChatMessage.MessageType_Time,"2017年7月4日");
-        Messages.add(Message);
-
-        Message=new ChatMessage(ChatMessage.MessageType_From,"山重水复疑无路");
+        ChatMessage Message=new ChatMessage(ChatMessage.MessageType_From,"山重水复疑无路");
         Messages.add(Message);
 
         Message=new ChatMessage(ChatMessage.MessageType_To,"柳暗花明又一村");
         Messages.add(Message);
 
+
+
+
         return Messages;
+    }
+
+    class databaseAdapter extends SQLiteOpenHelper {
+        public databaseAdapter(Context context, String name,
+                               SQLiteDatabase.CursorFactory factory, int version){
+            super(context, name, factory, version);
+        }
+        @Override
+        public void onCreate(SQLiteDatabase db){
+            Log.d("Create sql"  ,"CREATE TABLE chatting (" +
+                    "nickname   VARCHAR(30) NOT NULL," +
+                    "sendUserId    INT     NOT NULL," +
+                    "message   VARCHAR(200)" +
+                    ");");
+            db.execSQL("CREATE TABLE chatting (" +
+                    "nickname   VARCHAR(30) NOT NULL," +
+                    "sendUserId    INT     NOT NULL," +
+                    "message   VARCHAR(200)" +
+                    ");");
+        }
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
+        }
     }
 
 }

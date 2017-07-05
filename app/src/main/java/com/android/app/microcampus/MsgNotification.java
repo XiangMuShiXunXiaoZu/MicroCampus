@@ -3,6 +3,7 @@ package com.android.app.microcampus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -31,7 +32,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 
 /**
@@ -96,7 +96,6 @@ public class MsgNotification extends Fragment {
                     databaseAdapter dbAdapter = new databaseAdapter(getContext(), "message1", null, 3);
                     Log.d("DatabaseName", dbAdapter.getDatabaseName());
                     SQLiteDatabase db = dbAdapter.getWritableDatabase();
-
                     for(int i = 0; i < len; i++) {
                         HashMap<String, Object> listem = new HashMap<String, Object>();
                         String nickname = response.getString("nickname" + i);
@@ -105,11 +104,13 @@ public class MsgNotification extends Fragment {
                         listem.put("userId", response.getString("sendUserId" + i));
                         listem.put("username", response.getString("nickname" + i));
                         db.execSQL("INSERT INTO chatting (sendUserId, nickname, message) VALUES (" +
-                                  sendUserId + ", \"" + nickname + "\", \"" + message + "\");");
-                        //Cursor cursor = db.rawQuery("SELECT message FROM chatting WHERE nickname = \"" +
-                         //               nickname + "\");"
-                           //     , null);
-                        //Toast.makeText(getContext(),cursor.getString(1),Toast.LENGTH_SHORT).show();
+                                sendUserId + ", \"" + nickname + "\", \"" + message + "\");");
+                        Cursor cursor = db.rawQuery("SELECT message FROM chatting WHERE nickname = \"" +
+                                      nickname + "\";"
+                             , null);
+                        cursor.moveToFirst();
+                        Toast.makeText(getContext(),cursor.getString(0),Toast.LENGTH_SHORT).show();
+
                         listem.put("message", response.getString("message" + i));
                         listem.put("image", null);
                         listmsg.add(listem);
@@ -156,16 +157,18 @@ public class MsgNotification extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("userId", Integer.valueOf(listmsg.get(arg2).get("userId").toString()));
+                bundle.putString("nickname", (listmsg.get(arg2).get("nickname").toString()));
+
                 Intent intent = new Intent();
                 intent.setClass(getContext(), ChatActivity.class);
+
                 startActivity(intent);
             }
         });
 
     }
-
-
-
     class databaseAdapter extends SQLiteOpenHelper {
         public databaseAdapter(Context context, String name,
                                SQLiteDatabase.CursorFactory factory, int version){
@@ -176,21 +179,16 @@ public class MsgNotification extends Fragment {
             Log.d("Create sql"  ,"CREATE TABLE chatting (" +
                     "nickname   VARCHAR(30) NOT NULL," +
                     "sendUserId    INT     NOT NULL," +
-                    "message   VARCHAR(2000)" +
+                    "message   VARCHAR(200)" +
                     ");");
             db.execSQL("CREATE TABLE chatting (" +
                     "nickname   VARCHAR(30) NOT NULL," +
                     "sendUserId    INT     NOT NULL," +
-                    "message   VARCHAR(2000)" +
+                    "message   VARCHAR(200)" +
                     ");");
         }
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-
         }
-
     }
-
-
-
 }
