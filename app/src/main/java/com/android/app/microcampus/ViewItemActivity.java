@@ -1,8 +1,11 @@
 package com.android.app.microcampus;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +27,7 @@ public class ViewItemActivity extends AppCompatActivity {
         TextView itemTitle = (TextView)findViewById(R.id.itemTitleView);
         TextView itemDesc = (TextView)findViewById(R.id.itemDescView);
         TextView distance = (TextView)findViewById(R.id.itemLocationView);
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.chatActionButton);
         distance.setText(bundle.getString("distance"));
         itemTitle.setText(bundle.getString("itemName"));
         itemDesc.setText(bundle.getString("itemSummary"));
@@ -42,5 +46,15 @@ public class ViewItemActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(imageRequest);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 }

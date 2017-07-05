@@ -27,6 +27,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_chat);
+        getSupportActionBar().setTitle("用户一");
         final ListView mListView=(ListView)findViewById(R.id.MainList);
         mData=LoadData();
         mAdapter=new ChatAdapter(this, mData);
@@ -94,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
     {
         List<ChatMessage> Messages=new ArrayList<ChatMessage>();
 
-        ChatMessage Message=new ChatMessage(ChatMessage.MessageType_Time,"2013年12月27日");
+        ChatMessage Message=new ChatMessage(ChatMessage.MessageType_Time,"2017年7月4日");
         Messages.add(Message);
 
         Message=new ChatMessage(ChatMessage.MessageType_From,"山重水复疑无路");
