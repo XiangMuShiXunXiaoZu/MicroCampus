@@ -7,7 +7,7 @@ android {
         Release {
             keyAlias 'microcampus'
             keyPassword 'weixiaoyuan'
-            storeFile file('C:/Users/john/.android/microcampus.jks')
+            storeFile file('/Users/lulujie/microcampus.jks')
             storePassword 'weixiaoyuan'
         }
     }
