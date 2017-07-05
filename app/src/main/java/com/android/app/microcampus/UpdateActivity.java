@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,8 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.android.app.microcampus.R.id.action_release;
+
 /**
  * Created by welcome on 2017/7/4.
  */
@@ -36,8 +39,9 @@ public class UpdateActivity extends AppCompatActivity {
     private static final String TAG = "UpdateActivity";
     private static final String url="http://123.206.125.253/updateuserinfo"; //所需url
     private static RequestQueue requestQueue;
+    private Data app;
+    private String nickname, summary;
 
-    @Bind(R.id.update_name) EditText _nameText;
     @Bind(R.id.update_nickname) EditText _nicknameText;
     @Bind(R.id.update_summary) EditText _summaryText;
     @Bind(R.id.btn_update) Button _updateButton;
@@ -48,9 +52,11 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update_user_info);
         ButterKnife.bind(this);
 
+        app = (Data)getApplication();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle bundle = getIntent().getExtras();
         final int userId = bundle.getInt("userId");
-        _nameText.setText(bundle.getString("username"));
         _nicknameText.setText(bundle.getString("nickname"));
         _summaryText.setText(bundle.getString("summary"));
 
@@ -65,13 +71,11 @@ public class UpdateActivity extends AppCompatActivity {
                 progressDialog.setMessage("更新用户信息中...");
                 progressDialog.show();
 
-                String username = _nameText.getText().toString();
-                String nickname = _nicknameText.getText().toString();
-                String summary = _summaryText.getText().toString();
+                nickname = _nicknameText.getText().toString();
+                summary = _summaryText.getText().toString();
 
                 HashMap<String, String> newMap = new HashMap<String, String>();
                 newMap.put("userId", String.valueOf(userId));
-                newMap.put("username", username);
                 newMap.put("nickname", nickname);
                 newMap.put("summary", summary);
 
@@ -83,9 +87,16 @@ public class UpdateActivity extends AppCompatActivity {
                         try{
                             int isUpdate = response.getInt("isUpdate");
                             if (isUpdate >= 0){
-                                Toast.makeText(getBaseContext(), "更新用户信息成功", Toast.LENGTH_SHORT).show();
-                            }else {
+                                app.setNickname(nickname);
+                                app.setSummary(summary);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("summary", summary);
+                                bundle.putString("nickname", nickname);
 
+                                Toast.makeText(getBaseContext(), "更新用户信息成功", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, null);
+                                finish();
+                            }else {
                                 Toast.makeText(getBaseContext(), "用户信息上传有误", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
@@ -102,20 +113,16 @@ public class UpdateActivity extends AppCompatActivity {
                     }
                 });
                 requestQueue.add(req);
-
-
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-                Bundle bundle = new Bundle();
-                bundle.putString("username", username);
-                bundle.putString("summary", summary);
-                bundle.putString("nickname", nickname);
-
-                Intent intent = new Intent();
-                intent.putExtras(bundle);
-                intent.setClass(UpdateActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

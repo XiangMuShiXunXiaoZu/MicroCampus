@@ -3,9 +3,11 @@ package com.android.app.microcampus;
 import android.app.Application;
 
 public class Data extends Application {
-    private int userId = -1;
     private double latitude = 0.0f;
     private double longitude = 0.0f;
+    private int userId = -1;
+    private String nickname="";
+    private String summary="";
 
     public double getLatitude() {
         return latitude;
@@ -27,4 +29,10 @@ public class Data extends Application {
     public void setUserId(int uid){
         userId = uid;
     }
+
+    public String getNickname(){ return nickname; }
+    public void setNickname(String nickname){ this.nickname = nickname; }
+
+    public String getSummary(){ return nickname; }
+    public void setSummary(String summary){ this.summary = summary; }
 }

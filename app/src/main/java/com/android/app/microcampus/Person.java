@@ -44,15 +44,14 @@ import static com.android.app.microcampus.R.id.user_nickname;
  */
 public class Person extends Fragment {
     private static final String TAG = "PersonActivity";
-    private static final String url="http://123.206.125.253/getuserinfo"; //所需url
-    private static RequestQueue requestQueue;
     private SharedPreferences user_info;
-    private int userId;
-    private TextView user_name;
-    private TextView user_nickname;
-    private TextView user_summary;
-    private View view;
+    private static RequestQueue requestQueue;
+    private int userId = -1;
+    private static final String url="http://123.206.125.253/getuserinfo"; //所需url
+    private TextView userNickname;
+    private TextView userSummary;
     private Activity ac;
+    private Data app;
 
     public Person() {
         // Required empty public constructor
@@ -65,66 +64,61 @@ public class Person extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_person, container, false);
+        userNickname = (TextView)view.findViewById(R.id.user_nickname);
+        userSummary = (TextView)view.findViewById(R.id.user_summary);
+        requestQueue = Volley.newRequestQueue(getActivity());
 
-        return inflater.inflate(R.layout.fragment_person, container, false);
+        app = (Data)getActivity().getApplication();
+        setText();
+
+        return view;
+    }
+    void setText(){
+        String nickname = app.getNickname();
+        String summary = app.getSummary();
+        userNickname.setText(nickname);
+        userSummary.setText(summary);
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        if (ac==null) Log.v("activity", "null");
-        user_info = ac.getSharedPreferences("user_info", MODE_PRIVATE);
+    public void onStart() {
+        super.onStart();
+        user_info = getActivity().getSharedPreferences("user_info", MODE_PRIVATE);
         userId = user_info.getInt("uid", -1);
-        user_name = (TextView)view.findViewById(R.id.user_name);
-        user_nickname = (TextView)view.findViewById(R.id.user_nickname);
-        user_summary = (TextView)view.findViewById(R.id.user_summary);
-
-        requestQueue = Volley.newRequestQueue(getActivity());
-
-        //显示用户初始信息
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
 
         HashMap<String, Integer> userMap = new HashMap<String, Integer>();
         userMap.put("userId", userId);
-        JSONObject map=new JSONObject(userMap);
-        JsonObjectRequest req=new JsonObjectRequest(Request.Method.POST,url,map,new Response.Listener<JSONObject>(){
+        JSONObject map = new JSONObject(userMap);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, map, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject response){
-                try{
+            public void onResponse(JSONObject response) {
+                try {
                     int userId = response.getInt("userId");
-                    if(userId >= 0) {
-                        String username = response.getString("username");
+                    if (userId >= 0) {
                         String nickname = response.getString("nickname");
                         String summary = response.getString("summary");
-                        if(username == null)
-                            username = "";
-                        if(nickname == null)
+                        if (nickname.equals("null")) {
                             nickname = "";
-                        if(summary == null)
+                        }
+                        if (summary.equals("null")) {
                             summary = "";
-                        user_name.setText(username);
-                        user_nickname.setText(nickname);
-                        user_summary.setText(summary);
+                        }
+                        app.setNickname(nickname);
+                        app.setSummary(summary);
+                        userNickname.setText(nickname);
+                        userSummary.setText(summary);
                     }
                 } catch (JSONException e) {
                     Log.e("ERROR", e.getMessage(), e);
-                    //Toast.makeText(getBaseContext(), "服务器返回参数有误", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new Response.ErrorListener(){
+        }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error){
+            public void onErrorResponse(VolleyError error) {
                 Log.e("ERROR", error.getMessage(), error);
-                //Toast.makeText(getBaseContext(), "连接服务器失败", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(req);
-    }
-
-    @Override
-    public void onAttach(Context context){
-        super.onAttach(context);
-        ac = (MainActivity)context;
     }
 
     @Override
@@ -141,13 +135,12 @@ public class Person extends Fragment {
                 Log.d(TAG, "inside onclick");
                 Bundle bundle = new Bundle();
                 bundle.putInt("userId", userId);
-                bundle.putString("username", user_name.getText().toString());
-                bundle.putString("summary", user_summary.getText().toString());
-                bundle.putString("nickname", user_nickname.getText().toString());
+                bundle.putString("nickname", userNickname.getText().toString());
+                bundle.putString("summary", userSummary.getText().toString());
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
                 intent.setClass(getActivity(), UpdateActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

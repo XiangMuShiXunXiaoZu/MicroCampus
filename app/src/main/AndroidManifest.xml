@@ -63,7 +63,7 @@
             android:label="@string/title_view_item"></activity>
         <activity android:name=".UpdateActivity"
             android:launchMode="singleTop"
-            android:label="@string/title_view_item"></activity>
+            android:label="@string/title_modify_info"></activity>
         <activity android:name=".ChatActivity"></activity>
     </application>
 
