@@ -2,6 +2,7 @@ package com.android.app.microcampus;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -57,7 +59,7 @@ public class MsgNotification extends Fragment {
 
         listView = (ListView)view.findViewById(R.id.listView);
 //        HashMap<String, Object> map = new HashMap<String, Object>();
-//        map.put("image", R.drawable.ic_home_black_24dp);
+//        map.put("image",null);
 //        map.put("username", "一四又三");
 //        map.put("message", "陈树：淡定");
 //        listmsg.add(map);
@@ -91,7 +93,7 @@ public class MsgNotification extends Fragment {
                 listmsg,
                 R.layout.list_message,
                 new String[]{"username","message","image"},
-                new int[]{R.id.nameText,R.id.messageText,R.id.imageView});
+                new int[]{R.id.nameText,R.id.messageText,R.id.messageImageView});
         listView.setAdapter(myAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,6 +106,17 @@ public class MsgNotification extends Fragment {
             }
         });
 
+        myAdapter.setViewBinder(new SimpleAdapter.ViewBinder(){
+            @Override
+            public boolean setViewValue(View view, Object bitmapData, String s) {
+                if(view instanceof ImageView && bitmapData instanceof Bitmap){
+                    ImageView i = (ImageView)view;
+                    i.setImageBitmap((Bitmap) bitmapData);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         return view;
     }

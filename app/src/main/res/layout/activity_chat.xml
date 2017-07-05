@@ -13,26 +13,36 @@
     </ListView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:gravity="bottom" >
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:background="@color/white"
+        android:elevation="4dp">
         <EditText
             android:id="@+id/InputBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:textSize="15dp"
-            android:paddingStart="5dp"
-            android:textColor="#8B8989"
+            android:textSize="18sp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@null"
             android:inputType="text" >
             <requestFocus />
         </EditText>
-        <Button
+
+        <LinearLayout
             android:id="@+id/BtnSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="发送"
-            android:textColor="#ffffff"/>
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="@color/iron"
+            android:gravity="center"
+            android:layout_weight="0">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_send_white_24dp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
