@@ -53,18 +53,19 @@ public class ChatAdapter extends BaseAdapter{
         {
             case ChatMessage.MessageType_Time:
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_time, null);
-                Content=(TextView)mView.findViewById(R.id.Time);
+                Content=(TextView)mView.findViewById(R.id.time);
                 Content.setText(mData.get(Index).getContent());
                 break;
             case ChatMessage.MessageType_From:
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_from, null);
-                Content=(TextView)mView.findViewById(R.id.From_Content);
-                image = (ImageView)mView.findViewById(R.id.Header);
+                Content=(TextView)mView.findViewById(R.id.fromContent);
+                image = (ImageView)mView.findViewById(R.id.fromHeader);
                 Content.setText(mData.get(Index).getContent());
                 break;
             case ChatMessage.MessageType_To:
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_to, null);
-                Content=(TextView)mView.findViewById(R.id.To_Content);
+                Content=(TextView)mView.findViewById(R.id.toContent);
+                image = (ImageView)mView.findViewById(R.id.toHeader);
                 Content.setText(mData.get(Index).getContent());
                 break;
         }

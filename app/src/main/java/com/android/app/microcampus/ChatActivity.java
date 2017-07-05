@@ -2,11 +2,13 @@ package com.android.app.microcampus;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private Button BtnSend;
+    private LinearLayout BtnSend;
     private EditText InputBox;
     private List<ChatMessage> mData;
     private ChatAdapter mAdapter;
@@ -31,7 +33,24 @@ public class ChatActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
         mListView.smoothScrollToPositionFromTop(mData.size(), 0);
         InputBox=(EditText)findViewById(R.id.InputBox);
-        BtnSend=(Button)findViewById(R.id.BtnSend);
+        BtnSend=(LinearLayout)findViewById(R.id.BtnSend);
+
+        InputBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length()!=0){
+                    BtnSend.setBackgroundColor(getColor(R.color.accentLight));
+                }else{
+                    BtnSend.setBackgroundColor(getColor(R.color.iron));
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
 
         BtnSend.setOnClickListener(new View.OnClickListener()
         {
@@ -39,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 InputMethodManager imm=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-                if(InputBox.getText().toString()!="")
+                if(!InputBox.getText().toString().equals(""))
                 {
                     //获取时间
                     Calendar c=Calendar.getInstance();
@@ -86,9 +105,6 @@ public class ChatActivity extends AppCompatActivity {
 
         return Messages;
     }
-
-
-
 
 }
 
