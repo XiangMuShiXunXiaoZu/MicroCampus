@@ -55,12 +55,40 @@ public class ChatAdapter extends BaseAdapter{
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_from, null);
                 Content=(TextView)mView.findViewById(R.id.fromContent);
                 image = (ImageView)mView.findViewById(R.id.fromHeader);
+                switch (mData.get(Index).getUid()) {
+                    case 1:
+                        image.setImageResource(R.mipmap.hd_1);
+                        break;
+                    case 2:
+                        image.setImageResource(R.mipmap.hd_2);
+                        break;
+                    case 3:
+                        image.setImageResource(R.mipmap.hd_3);
+                        break;
+                    case 4:
+                        image.setImageResource(R.mipmap.hd_4);
+                        break;
+                }
                 Content.setText(mData.get(Index).getContent());
                 break;
             case ChatMessage.MessageType_To:
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_to, null);
                 Content=(TextView)mView.findViewById(R.id.toContent);
                 image = (ImageView)mView.findViewById(R.id.toHeader);
+                switch (mData.get(Index).getUid()) {
+                    case 1:
+                        image.setImageResource(R.mipmap.hd_1);
+                        break;
+                    case 2:
+                        image.setImageResource(R.mipmap.hd_2);
+                        break;
+                    case 3:
+                        image.setImageResource(R.mipmap.hd_3);
+                        break;
+                    case 4:
+                        image.setImageResource(R.mipmap.hd_4);
+                        break;
+                }
                 Content.setText(mData.get(Index).getContent());
                 break;
         }

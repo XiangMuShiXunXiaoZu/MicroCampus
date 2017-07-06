@@ -101,7 +101,7 @@ public class ChatActivity extends AppCompatActivity {
                 if(!InputBox.getText().toString().equals(""))
                 {
                     //构造输入消息
-                    ChatMessage message=new ChatMessage(ChatMessage.MessageType_To,InputBox.getText().toString());
+                    ChatMessage message=new ChatMessage(ChatMessage.MessageType_To,InputBox.getText().toString(), userId);
                     mData.add(message);
                     HashMap<Object, Object> itemMap=new HashMap<Object, Object>();
                     itemMap.put("sendUserId", userId);
@@ -169,7 +169,13 @@ public class ChatActivity extends AppCompatActivity {
         cursor.moveToFirst();
 
         for(int i = 0; i < num; i++) {
-            ChatMessage Message = new ChatMessage(cursor.getInt(cursor.getColumnIndex("type")), cursor.getString(cursor.getColumnIndex("message")));
+            ChatMessage Message;
+            if (cursor.getInt(cursor.getColumnIndex("type"))==0){
+                Message = new ChatMessage(cursor.getInt(cursor.getColumnIndex("type")), cursor.getString(cursor.getColumnIndex("message")), userId);
+            }else{
+                Message = new ChatMessage(cursor.getInt(cursor.getColumnIndex("type")), cursor.getString(cursor.getColumnIndex("message")), sendId);
+            }
+
             mData.add(Message);
             cursor.moveToNext();
         }
