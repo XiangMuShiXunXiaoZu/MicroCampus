@@ -1,80 +1,148 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.android.app.microcampus.Person">
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.android.app.microcampus.Person">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="56dp">
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="top|center_vertical"
+                  android:orientation="vertical">
 
-        <android.support.v7.widget.LinearLayoutCompat
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
             android:gravity=""
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:background="@color/white">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="用户名" />
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+            <ImageView
+                android:id="@+id/person_picture"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_person_black_24dp"
                 />
-        </android.support.v7.widget.LinearLayoutCompat>
-
-        <android.support.v7.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:gravity=""
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="昵称" />
-            <TextView
-                android:id="@+id/user_nickname"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-               />
-        </android.support.v7.widget.LinearLayoutCompat>
+                android:layout_height="64dp"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/person_picture">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="40dp"
+                        android:layout_height="32dp"
+                        android:paddingTop="8dp"
+                        android:text="昵称"/>
+                    <TextView
+                        android:id="@+id/user_nickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:paddingTop="8dp"
+                        android:hint="未设置"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="用户名"
+                        android:paddingTop="4dp"/>
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:paddingTop="4dp"
+                        android:layout_toRightOf="@id/person_picture"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
 
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="104dp"
+            android:layout_marginTop="20dp"
             android:gravity=""
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="用户简介" />
+                android:layout_height="24dp"
+                android:paddingLeft="24dp"
+                android:text="  简介"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/ic_voicemail_black_24dp"/>
             <TextView
                 android:id="@+id/user_summary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+                android:paddingLeft="24dp"
+                android:paddingTop="8dp"
                 android:inputType="textMultiLine"
                 android:minLines="6" />
         </android.support.v7.widget.LinearLayoutCompat>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="24dp"
+                android:text="  我的物品"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/ic_folder_special_black_24dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/graywhite"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="24dp"
+                android:text="  浏览纪录"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/ic_dvr_black_24dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="12dp"
+            android:paddingLeft="24dp"
+            android:drawableLeft="@drawable/ic_settings_black_24dp"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:text="  设置"
+            />
 
     </LinearLayout>
 
