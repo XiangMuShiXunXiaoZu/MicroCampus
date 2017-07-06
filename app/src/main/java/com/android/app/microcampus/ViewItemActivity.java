@@ -50,11 +50,19 @@ public class ViewItemActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Data app=(Data)getApplication();
+
+                Bundle myBundle = new Bundle();
+                Bundle bundle = getIntent().getExtras();
+                if (bundle.getInt("userId") == app.getUserId()) return; //不能和自己聊天
+
+                myBundle.putInt("sendId", bundle.getInt("userId"));
+                myBundle.putString("nickname", bundle.getString("nickname"));
                 Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                intent.putExtras(myBundle);
                 startActivity(intent);
             }
         });
-
 
     }
 }

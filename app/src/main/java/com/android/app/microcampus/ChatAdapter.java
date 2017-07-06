@@ -51,11 +51,6 @@ public class ChatAdapter extends BaseAdapter{
         ImageView image;
         switch(mData.get(Index).getType())
         {
-            case ChatMessage.MessageType_Time:
-                mView=LayoutInflater.from(mContext).inflate(R.layout.layout_time, null);
-                Content=(TextView)mView.findViewById(R.id.time);
-                Content.setText(mData.get(Index).getContent());
-                break;
             case ChatMessage.MessageType_From:
                 mView=LayoutInflater.from(mContext).inflate(R.layout.layout_from, null);
                 Content=(TextView)mView.findViewById(R.id.fromContent);

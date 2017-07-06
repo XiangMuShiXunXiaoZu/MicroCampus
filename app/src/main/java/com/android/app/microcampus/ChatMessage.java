@@ -5,9 +5,8 @@ package com.android.app.microcampus;
  */
 
 public class ChatMessage {
-    public static final int MessageType_Time=0;
     public static final int MessageType_From = 1;
-    public static final int MessageType_To =2;
+    public static final int MessageType_To = 0;
     private int mType;
     private String mContent;
 

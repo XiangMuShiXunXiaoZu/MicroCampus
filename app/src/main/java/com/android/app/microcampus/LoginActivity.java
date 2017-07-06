@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("登录中...");
         progressDialog.show();
 
-        HashMap<Object, Object>userMap=new HashMap<Object, Object>();
+        HashMap<Object, Object>userMap = new HashMap<Object, Object>();
         userMap.put("username", username);
         userMap.put("password", password);
         JSONObject map=new JSONObject(userMap);
