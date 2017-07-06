@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,6 @@ public class Person extends Fragment {
     private TextView userNickname;
     private TextView userSummary;
     private TextView userName;
-    private Activity ac;
     private Data app;
 
     public Person() {
@@ -69,10 +69,23 @@ public class Person extends Fragment {
         userSummary = (TextView)view.findViewById(R.id.user_summary);
         userName = (TextView)view.findViewById(R.id.user_name);
         requestQueue = Volley.newRequestQueue(getActivity());
-
         app = (Data)getActivity().getApplication();
+        ImageView img = (ImageView)view.findViewById(R.id.person_picture);
+        switch (app.getUserId()) {
+            case 1:
+                img.setImageResource(R.mipmap.hd_1);
+                break;
+            case 2:
+                img.setImageResource(R.mipmap.hd_2);
+                break;
+            case 3:
+                img.setImageResource(R.mipmap.hd_3);
+                break;
+            case 4:
+                img.setImageResource(R.mipmap.hd_4);
+                break;
+        }
         setText();
-
         return view;
     }
     void setText(){

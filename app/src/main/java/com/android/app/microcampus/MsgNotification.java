@@ -89,9 +89,23 @@ public class MsgNotification extends Fragment {
         myAdapter.setViewBinder(new SimpleAdapter.ViewBinder(){
             @Override
             public boolean setViewValue(View view, Object bitmapData, String s) {
-                if(view instanceof ImageView && bitmapData instanceof Bitmap){
+                if(view instanceof ImageView && bitmapData instanceof Number){
                     ImageView i = (ImageView)view;
-                    i.setImageBitmap((Bitmap) bitmapData);
+                    switch (((Integer) bitmapData).intValue()){
+                        case 1:
+                            i.setImageResource(R.mipmap.hd_1);
+                            break;
+                        case 2:
+                            i.setImageResource(R.mipmap.hd_2);
+                            break;
+                        case 3:
+                            i.setImageResource(R.mipmap.hd_3);
+                            break;
+                        case 4:
+                            i.setImageResource(R.mipmap.hd_4);
+                            break;
+                    }
+                    //i.setImageBitmap((Bitmap) bitmapData);
                     return true;
                 }
                 return false;
@@ -155,7 +169,7 @@ public class MsgNotification extends Fragment {
                             Cursor myCursor = db.rawQuery("SELECT message, nickname FROM chatting WHERE sendId = " +
                                     cursor.getInt(cursor.getColumnIndex("sendId")) + ";", null);
                             myCursor.moveToLast();
-                            listem.put("image", null);
+                            listem.put("image", cursor.getInt(cursor.getColumnIndex("sendId")));
                             listem.put("sendId", cursor.getInt(cursor.getColumnIndex("sendId")));
                             listem.put("message", myCursor.getString(myCursor.getColumnIndex("message")));
                             listem.put("nickname", myCursor.getString(myCursor.getColumnIndex("nickname")));
