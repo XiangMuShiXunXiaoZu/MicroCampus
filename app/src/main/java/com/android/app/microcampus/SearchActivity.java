@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("itemId", Integer.valueOf(listems.get(arg2).get("nickname").toString()));
+                bundle.putString("nickname", listems.get(arg2).get("nickname").toString());
                 bundle.putInt("itemId", Integer.valueOf(listems.get(arg2).get("itemId").toString()));
                 bundle.putInt("userId", Integer.valueOf(listems.get(arg2).get("userId").toString()));
                 bundle.putString("itemName", (listems.get(arg2).get("itemName").toString()));

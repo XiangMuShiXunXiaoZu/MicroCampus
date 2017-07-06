@@ -50,6 +50,7 @@ public class Person extends Fragment {
     private static final String url="http://123.206.125.253/getuserinfo"; //所需url
     private TextView userNickname;
     private TextView userSummary;
+    private TextView userName;
     private Activity ac;
     private Data app;
 
@@ -66,6 +67,7 @@ public class Person extends Fragment {
         View view = inflater.inflate(R.layout.fragment_person, container, false);
         userNickname = (TextView)view.findViewById(R.id.user_nickname);
         userSummary = (TextView)view.findViewById(R.id.user_summary);
+        userName = (TextView)view.findViewById(R.id.user_name);
         requestQueue = Volley.newRequestQueue(getActivity());
 
         app = (Data)getActivity().getApplication();
@@ -76,8 +78,10 @@ public class Person extends Fragment {
     void setText(){
         String nickname = app.getNickname();
         String summary = app.getSummary();
+        String username = app.getUsername();
         userNickname.setText(nickname);
         userSummary.setText(summary);
+        userName.setText(username);
     }
 
     @Override

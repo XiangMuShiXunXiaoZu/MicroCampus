@@ -87,6 +87,7 @@ public class SignupActivity extends AppCompatActivity {
                         user_info = getSharedPreferences("user_info", MODE_PRIVATE);
                         SharedPreferences.Editor edt = user_info.edit();
                         edt.putInt("uid", userId);
+                        edt.putString("username", username);
                         edt.commit();
                         onSignupSuccess();
                     }else {

@@ -38,14 +38,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_width="40dp"
+                        android:id="@+id/textView"
+                        android:layout_width="56dp"
                         android:layout_height="32dp"
                         android:paddingTop="8dp"
-                        android:text="昵称"/>
+                        android:paddingLeft="4dp"
+                        android:text="昵称" />
+
                     <TextView
                         android:id="@+id/user_nickname"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:paddingTop="8dp"
                         android:hint="未设置"
@@ -55,18 +59,22 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="32dp">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:text="用户名"
-                        android:paddingTop="4dp"/>
-                    <TextView
-                        android:id="@+id/user_name"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textView2"
+                        android:layout_width="56dp"
                         android:layout_height="32dp"
                         android:paddingTop="4dp"
+                        android:paddingLeft="4dp"
+                        android:text="注册名" />
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
                         android:layout_toRightOf="@id/person_picture"
-                        android:textColor="@color/black"/>
+                        android:paddingTop="4dp"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
 

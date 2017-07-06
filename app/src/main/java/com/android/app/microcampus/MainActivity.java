@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             app.setUserId(userId);
         }
+        app.setUsername(user_info.getString("username",""));
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

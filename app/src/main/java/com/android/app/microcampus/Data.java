@@ -8,6 +8,7 @@ public class Data extends Application {
     private int userId = -1;
     private String nickname="";
     private String summary="";
+    private String username="";
 
     public double getLatitude() {
         return latitude;
@@ -35,4 +36,7 @@ public class Data extends Application {
 
     public String getSummary(){ return nickname; }
     public void setSummary(String summary){ this.summary = summary; }
+
+    public String getUsername(){ return username; }
+    public void setUsername(String username){ this.username = username; }
 }
